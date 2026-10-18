@@ -1,0 +1,558 @@
+/* =============================================================================
+   Maritime Emergency Response System — Digital Twin Stylesheet
+   =============================================================================
+   REFACTORED (Tasks 4, 10, 12):
+     · Added +12h button style
+     · Added risk trend chart container
+     · Added safety score breakdown bars
+     · Added dot-info timeline type
+     · Emergency mission card styles
+     · Improved scrollbar & panel animations
+   ============================================================================= */
+
+/* ── RIGHT-SIDE DIGITAL TWIN PANEL ───────────────────────────────────────── */
+
+.dt-panel {
+    position: fixed;
+    top: 58px;
+    right: 0;
+    width: 390px;
+    height: calc(100vh - 58px);
+    background: linear-gradient(180deg, #09121d 0%, #0d1b2a 100%);
+    border-left: 1px solid #1e3a5f;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -6px 0 32px rgba(0,0,0,0.6);
+    overflow: visible !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.dt-panel.visible {
+    transform: translateX(0);
+}
+
+/* ── PROTRUDING RIGHT SIDE TAB ─────────────────────────────────────────────── */
+
+.dt-side-tab {
+    position: absolute;
+    left: -46px;
+    top: 110px;
+    width: 46px;
+    height: 160px;
+    background: linear-gradient(180deg, #0c1f36 0%, #0f2a44 100%);
+    border: 1px solid #38bdf8;
+    border-right: none;
+    border-radius: 12px 0 0 12px;
+    color: #38bdf8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.6);
+    z-index: 2005;
+    transition: all 0.25s ease;
+}
+
+.dt-side-tab:hover {
+    background: linear-gradient(180deg, #1e3a5f 0%, #0f2a44 100%);
+    left: -50px;
+    width: 50px;
+    box-shadow: -10px 0 30px rgba(56, 189, 248, 0.4);
+}
+
+.dt-side-tab-icon {
+    font-size: 16px;
+}
+
+.dt-side-tab-text {
+    writing-mode: vertical-rl;
+    text-transform: uppercase;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 1.6px;
+    transform: rotate(180deg);
+    white-space: nowrap;
+}
+
+.dt-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #1e3a5f;
+    background: linear-gradient(90deg, #0c1f36, #0f2a44);
+    flex-shrink: 0;
+}
+
+.dt-panel-title {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dt-panel-close {
+    background: none;
+    border: 1px solid #1e3a5f;
+    color: #64748b;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.dt-panel-close:hover {
+    background: #1e3a5f;
+    color: #e2e8f0;
+}
+
+.dt-panel-body {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 12px 14px 28px;
+    scrollbar-width: thin;
+    scrollbar-color: #1e3a5f transparent;
+    position: relative;
+}
+
+.dt-panel-body::-webkit-scrollbar { width: 5px; }
+.dt-panel-body::-webkit-scrollbar-track { background: transparent; }
+.dt-panel-body::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 3px; }
+
+/* ── SECTION HEADER BAR ────────────────────────────────────────────────── */
+
+.dt-sec-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 14px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #1e3a5f;
+}
+
+.dt-sec-hdr:first-child { margin-top: 0; }
+
+.dt-sec-title {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #38bdf8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dt-sec-tag {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.tag-current { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+.tag-future  { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
+
+/* ── CARDS & GRIDS ──────────────────────────────────────────────────────── */
+
+.dt-card {
+    background: linear-gradient(135deg, #0f2032 0%, #0c1a2e 100%);
+    border: 1px solid #1e3a5f;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+    position: relative;
+    animation: dtCardIn 0.25s ease-out;
+}
+
+@keyframes dtCardIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.dt-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.dt-grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+}
+
+.dt-kv-box {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 6px;
+    padding: 7px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.2s ease;
+}
+
+.dt-kv-box:hover {
+    background: rgba(255, 255, 255, 0.055);
+}
+
+.dt-kv-lbl {
+    font-size: 9px;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.dt-kv-val {
+    font-size: 11px;
+    font-weight: 700;
+    color: #e2e8f0;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.2;
+}
+
+.dt-kv-val.cyan  { color: #38bdf8; }
+.dt-kv-val.green { color: #10b981; }
+.dt-kv-val.amber { color: #f59e0b; }
+.dt-kv-val.red   { color: #ef4444; }
+
+/* ── SECTION 2: TIME SIMULATION CONTROLS ───────────────────────────────── */
+
+.ts-ctrl-box {
+    background: linear-gradient(135deg, #0d1b2a 0%, #162a45 100%);
+    border: 1px solid #1e3a5f;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+}
+
+.ts-clock-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 6px;
+}
+
+.ts-clock-box {
+    text-align: center;
+    background: rgba(0,0,0,0.25);
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid #1e3a5f;
+    flex: 1;
+}
+
+.ts-clock-title { font-size: 8.5px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+.ts-clock-time  { font-size: 14px; font-weight: 700; color: #38bdf8; font-family: 'JetBrains Mono', monospace; }
+
+.ts-slider-wrap { margin-bottom: 10px; }
+
+.ts-slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8.5px;
+    color: #64748b;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 4px;
+}
+
+.ts-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #38bdf8 var(--pct, 0%), #1e3a5f var(--pct, 0%));
+    outline: none;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.ts-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #38bdf8;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.7);
+    border: 2px solid #0d1b2a;
+    transition: transform 0.15s ease;
+}
+
+.ts-slider::-webkit-slider-thumb:hover { transform: scale(1.25); }
+
+/* ── Time Control Buttons (including +12h) ──────────────────────────────── */
+
+.ts-btn-row {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+}
+
+.ts-btn {
+    flex: 1;
+    min-width: 0;
+    background: #102338;
+    border: 1px solid #1e3a5f;
+    color: #94a3b8;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 5px 2px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.15s ease;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.ts-btn:hover {
+    background: #1e3a5f;
+    color: #e2e8f0;
+    border-color: #38bdf8;
+    transform: translateY(-1px);
+}
+
+.ts-btn:active {
+    transform: translateY(0);
+}
+
+.ts-btn-reset {
+    background: #172554;
+    border-color: #1d4ed8;
+    color: #93c5fd;
+}
+
+.ts-btn-reset:hover {
+    background: #1e3a8a;
+    color: #bfdbfe;
+    border-color: #3b82f6;
+}
+
+/* ── RISK & SAFETY BADGES ──────────────────────────────────────────────── */
+
+.risk-level-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+}
+
+.badge-low      { background: rgba(16,185,129,0.18); color: #10b981; border: 1px solid rgba(16,185,129,0.35); }
+.badge-medium   { background: rgba(234,179,8,0.18);  color: #eab308; border: 1px solid rgba(234,179,8,0.35); }
+.badge-high     { background: rgba(249,115,22,0.18); color: #f97316; border: 1px solid rgba(249,115,22,0.35); }
+.badge-critical { background: rgba(239,68,68,0.18);  color: #ef4444; border: 1px solid rgba(239,68,68,0.35); animation: criticalPulse 1.2s ease-in-out infinite; }
+
+@keyframes criticalPulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(239,68,68,0.3); }
+    50%       { box-shadow: 0 0 14px rgba(239,68,68,0.7); }
+}
+
+/* ── PORT SWITCH NOTIFICATION ─────────────────────────────────────────── */
+
+.port-switch-banner {
+    background: rgba(234, 179, 8, 0.12);
+    border: 1px solid rgba(234, 179, 8, 0.4);
+    border-radius: 6px;
+    padding: 7px 10px;
+    margin-top: 8px;
+    font-size: 10px;
+    color: #eab308;
+    line-height: 1.4;
+    animation: bannerSlide 0.4s ease-out;
+}
+
+@keyframes bannerSlide {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── TIMELINE (Task 11) ─────────────────────────────────────────────────── */
+
+.dt-timeline {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dt-tl-item {
+    display: flex;
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    align-items: flex-start;
+}
+
+.dt-tl-item:last-child { border-bottom: none; }
+
+.dt-tl-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.dot-success { background: #10b981; box-shadow: 0 0 5px rgba(16,185,129,0.6); }
+.dot-warning { background: #f59e0b; box-shadow: 0 0 5px rgba(245,158,11,0.6); }
+.dot-danger  { background: #ef4444; box-shadow: 0 0 5px rgba(239,68,68,0.6); }
+.dot-info    { background: #38bdf8; box-shadow: 0 0 5px rgba(56,189,248,0.4); }
+
+.dt-tl-time { font-size: 8px; color: #475569; font-family: 'JetBrains Mono', monospace; }
+.dt-tl-text { font-size: 10px; color: #cbd5e1; line-height: 1.35; }
+
+/* ── RISK TREND CHART (Task 12) ─────────────────────────────────────────── */
+
+#dtRiskTrendChart {
+    min-height: 56px;
+    overflow: hidden;
+    position: relative;
+}
+
+#dtRiskTrendChart svg {
+    display: block;
+}
+
+/* ── LOADING OVERLAY ───────────────────────────────────────────────────── */
+
+.dt-loading-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 27, 42, 0.65);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.dt-loading-overlay.active { display: flex; }
+
+.dt-spinner {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #1e3a5f;
+    border-top-color: #38bdf8;
+    border-radius: 50%;
+    animation: dtSpin 0.7s linear infinite;
+}
+
+@keyframes dtSpin { to { transform: rotate(360deg); } }
+
+/* ── MAP TOGGLE BUTTON ─────────────────────────────────────────────────── */
+
+#dtToggleBtn {
+    position: fixed;
+    top: 140px;
+    right: 14px;
+    z-index: 1400;
+    background: linear-gradient(135deg, #0c1f36, #0f2a44);
+    border: 1px solid #1e3a5f;
+    color: #38bdf8;
+    font-size: 10.5px;
+    font-weight: 800;
+    padding: 7px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 14px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Inter', sans-serif;
+}
+
+#dtToggleBtn:hover {
+    background: linear-gradient(135deg, #1e3a5f, #0f2a44);
+    border-color: #38bdf8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+}
+
+#dtToggleBtn .dt-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #334155;
+    transition: background 0.3s ease;
+}
+
+#dtToggleBtn .dt-dot.active {
+    background: #10b981;
+    box-shadow: 0 0 8px rgba(16,185,129,0.7);
+    animation: dotPulse 2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 4px rgba(16,185,129,0.5); }
+    50%       { box-shadow: 0 0 12px rgba(16,185,129,0.9); }
+}
+
+/* ── Emergency Mission Card ─────────────────────────────────────────────── */
+
+#dtSecEmergency .dt-card {
+    border-color: rgba(239, 68, 68, 0.5) !important;
+    background: linear-gradient(135deg, #1a0c0c 0%, #0c1a0c 100%);
+    animation: emergencyCardIn 0.35s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes emergencyCardIn {
+    from { opacity: 0; transform: scale(0.95) translateY(6px); }
+    to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+/* ── Why Port Modal ─────────────────────────────────────────────────────── */
+
+.why-port-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 9000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.why-port-modal-box {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    max-width: 440px;
+    width: 94vw;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+    animation: whyModalIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+@keyframes whyModalIn {
+    from { transform: scale(0.88); opacity: 0; }
+    to   { transform: scale(1);    opacity: 1; }
+}

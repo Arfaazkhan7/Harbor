@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Maritime Emergency Response System - Interactive World Map with Real-Time Ships & Ports">
+    <title>Maritime Emergency Response System | Ships & Ports Map</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+          crossorigin="" />
+          
+    <!-- Leaflet MarkerCluster CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="css/style.css?v=20260825r1">
+    <!-- Simulation Ship Stylesheet -->
+    <link rel="stylesheet" href="css/simulation.css?v=20260825r1">
+    <!-- Digital Twin Time Simulation Stylesheet -->
+    <link rel="stylesheet" href="css/timesim.css?v=20260825r1">
+</head>
+<body>
+
+    <!-- ===== APP SHELL ===== -->
+    <div class="app-shell">
+
+        <!-- TOP NAVBAR -->
+        <nav class="top-navbar">
+            <div class="navbar-left">
+                <div class="nav-brand">
+                    <div class="nav-brand-icon">⚓</div>
+                    <div class="nav-brand-text">
+                        <div class="nav-brand-title">Maritime Emergency Response System</div>
+                        <div class="nav-brand-sub">Ships &amp; Ports Module • Digital Twin</div>
+                    </div>
+                </div>
+                <button type="button" class="nav-hamburger" title="Toggle Sidebar" onclick="toggleLeftSidebar()">&#9776;</button>
+            </div>
+            <div class="navbar-center">
+                <div class="nav-search-wrap">
+                    <span class="nav-search-icon">🔍</span>
+                    <input type="text" class="nav-search-input" placeholder="Search ships, ports, or coordinates..." id="globalSearch">
+                </div>
+            </div>
+            <div class="navbar-right">
+                <button class="nav-icon-btn" title="Toggle Ports Layer" id="togglePortsBtn" aria-label="Toggle Ports Layer">
+                    <span class="nav-bell">⚓</span>
+                    <span class="nav-badge" id="portCount">--</span>
+                </button>
+                <button class="nav-report-btn" id="navDtToggleBtn" onclick="if(window.TimeSim) window.TimeSim.togglePanel();" style="background: linear-gradient(135deg, #0c1f36, #0f2a44); border: 1px solid #1e3a5f; color: #38bdf8;">
+                    <span>🤖</span> AI Digital Twin
+                </button>
+            </div>
+        </nav>
+
+        <!-- APP BODY -->
+        <div class="app-body">
+
+            <aside class="left-sidebar" id="leftSidebar">
+                <div>
+                    <div class="sidebar-top">
+                        <span class="sidebar-title">NAVIGATION</span>
+                        <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" title="Close Sidebar" onclick="toggleLeftSidebar()">◀</button>
+                    </div>
+                    <nav class="sidebar-nav">
+                        <button type="button" class="sidebar-nav-item active" id="navLiveMap" onclick="switchMaritimeMode('live_map')">
+                            <span class="sidebar-nav-icon">🗺️</span>
+                            <span class="sidebar-nav-label">Live Map</span>
+                        </button>
+                        <button type="button" class="sidebar-nav-item" id="navShips" onclick="switchMaritimeMode('ships')">
+                            <span class="sidebar-nav-icon">🚢</span>
+                            <span class="sidebar-nav-label">Ships</span>
+                        </button>
+                        <button type="button" class="sidebar-nav-item" id="navPorts" onclick="switchMaritimeMode('ports')">
+                            <span class="sidebar-nav-icon">⚓</span>
+                            <span class="sidebar-nav-label">Ports</span>
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="sidebar-footer">
+                    <div class="sidebar-status">
+                        <span class="sidebar-status-dot"></span>
+                        <span class="sidebar-status-label">System Status</span>
+                    </div>
+                    <div class="sidebar-status-sub">All Systems Operational</div>
+                    <div class="sidebar-datetime" id="sidebarDateTime"></div>
+                </div>
+            </aside>
+
+            <!-- MAP + PANEL AREA -->
+            <div class="main-content">
+
+                <!-- Coordinate Panel (top-right of map area) -->
+                <div class="coordinate-panel" id="coordinatePanel">
+                    <div class="coord-panel-header">
+                        <span class="coord-panel-pin">📍</span>
+                        <span class="coord-panel-title">CLICKED LOCATION</span>
+                    </div>
+                    <div class="coord-panel-row">
+                        <span class="coord-panel-lbl">Latitude</span>
+                        <span class="coord-panel-val" id="latValue">--.------</span>
+                    </div>
+                    <div class="coord-panel-row">
+                        <span class="coord-panel-lbl">Longitude</span>
+                        <span class="coord-panel-val" id="lngValue">--.------</span>
+                    </div>
+                    <div class="coord-panel-sub" id="panelStatus">Click map to inspect coordinates</div>
+                </div>
+
+                <!-- Full Map -->
+                <div id="map" aria-label="Interactive Maritime World Map"></div>
+
+                <!-- Floating Add Ship Button -->
+                <button id="simAddBtn" class="sim-add-btn" title="Place a simulation ship on the ocean">+ Add Simulation Ship</button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JavaScript Library -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+            crossorigin=""></script>
+            
+    <!-- Leaflet MarkerCluster JS -->
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+    <!-- Modular Frontend Application Scripts -->
+    <script src="js/map.js?v=20260825r1"></script>
+    <script src="js/ships.js?v=20260825r1"></script>
+    <script src="js/ports.js?v=20260825r1"></script>
+
+    <!-- Marine Route & Marine Weather Engine Modules -->
+    <script src="js/weather.js?v=20260825r1"></script>
+    <script src="js/animation.js?v=20260825r1"></script>
+    <script src="js/route.js?v=20260825r1"></script>
+
+    <!-- Simulation Ship Module (independent from AIS database) -->
+    <script src="js/simulation.js?v=20260825r1"></script>
+
+    <!-- Background AI Mission Engine -->
+    <script src="js/mission_engine.js?v=20260825r1"></script>
+
+    <!-- Digital Twin Time Simulation Engine -->
+    <script src="js/timesim.js?v=20260825r1"></script>
+
+    <!-- Global Application Controller Script -->
+    <script>
+        let _activeMapInstance = null;
+        let _modulesReady = false;
+
+        // Global Sidebar Toggle Function
+        function toggleLeftSidebar() {
+            const leftSidebar = document.getElementById('leftSidebar');
+            if (leftSidebar) {
+                leftSidebar.classList.toggle('collapsed');
+                setTimeout(() => {
+                    if (_activeMapInstance) _activeMapInstance.invalidateSize();
+                }, 310);
+            }
+        }
+        window.toggleLeftSidebar = toggleLeftSidebar;
+
+        // Print Complete Debug Information
+        function printCompleteDebugInfo(mode) {
+            const shipCluster = window.MaritimeShips ? MaritimeShips.getClusterGroup() : null;
+            const portCluster = window.MaritimePorts ? MaritimePorts.getClusterGroup() : null;
+            const map = window.MaritimeMap ? MaritimeMap.getMap() : null;
+
+            const shipsVisible = (map && shipCluster) ? map.hasLayer(shipCluster) : false;
+            const portsVisible = (map && portCluster) ? map.hasLayer(portCluster) : false;
+
+            console.group(`=== MARITIME LAYER DEBUG LOG [Mode: ${mode.toUpperCase()}] ===`);
+            console.log("Current Mode:", mode);
+            console.log("Ships Layer Visible:", shipsVisible);
+            console.log("Ports Layer Visible:", portsVisible);
+            console.groupEnd();
+        }
+
+        // Global Mode Switcher Function
+        function switchMaritimeMode(mode) {
+            if (!_modulesReady) {
+                console.warn("[DEBUG] Modules not fully ready yet. Ignoring mode switch.");
+                return;
+            }
+
+            console.log(">>> switchMaritimeMode called for:", mode);
+
+            const navLiveMap = document.getElementById('navLiveMap');
+            const navShips   = document.getElementById('navShips');
+            const navPorts   = document.getElementById('navPorts');
+
+            [navLiveMap, navShips, navPorts].forEach(btn => btn && btn.classList.remove('active'));
+
+            if (mode === 'live_map') {
+                if (navLiveMap) navLiveMap.classList.add('active');
+                if (window.MaritimeShips) window.MaritimeShips.setShipsVisible(true);
+                if (window.MaritimePorts) window.MaritimePorts.setPortsVisible(true);
+            } else if (mode === 'ships') {
+                if (navShips) navShips.classList.add('active');
+                if (window.MaritimeShips) window.MaritimeShips.setShipsVisible(true);
+                if (window.MaritimePorts) window.MaritimePorts.setPortsVisible(false);
+            } else if (mode === 'ports') {
+                if (navPorts) navPorts.classList.add('active');
+                if (window.MaritimeShips) window.MaritimeShips.setShipsVisible(false);
+                if (window.MaritimePorts) window.MaritimePorts.setPortsVisible(true);
+            }
+
+            printCompleteDebugInfo(mode);
+        }
+        window.switchMaritimeMode = switchMaritimeMode;
+
+        // Required Initialization Order
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Leaflet Map initialized
+            _activeMapInstance = MaritimeMap.init('map');
+
+            // 2. Ships initialized
+            MaritimeShips.init(_activeMapInstance);
+
+            // 3. Ports initialized
+            MaritimePorts.init(_activeMapInstance);
+
+            // 4. Auxiliary modules
+            SimulationShip.init(_activeMapInstance);
+            MaritimeWeather.init(_activeMapInstance);
+            MaritimeRoute.init(_activeMapInstance);
+            MaritimeAnimation.init(_activeMapInstance);
+
+            // 5. Digital Twin engine & Background Mission Engine
+            TimeSim.init(_activeMapInstance);
+            if (window.MissionEngine) window.MissionEngine.init();
+
+            // 6. Wire SimulationShip → TimeSim & MissionEngine
+            SimulationShip.onUpdate((ship) => {
+                if (ship && window.MissionEngine) {
+                    window.MissionEngine.startMission(ship);
+                }
+                if (ship && window.TimeSim) {
+                    window.TimeSim.onShipUpdate(ship);
+                }
+            });
+
+            // 7. Expose globals
+            window.MaritimeShips = MaritimeShips;
+            window.MaritimePorts = MaritimePorts;
+
+            // 8. Mark modules ready
+            _modulesReady = true;
+            console.log("[DEBUG] Initialization complete. Digital Twin ready.");
+
+            // Live clock for sidebar
+            function updateClock() {
+                const now = new Date();
+                const el = document.getElementById('sidebarDateTime');
+                if (!el) return;
+                const d = now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+                const t = now.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+                const tz = (now.getTimezoneOffset() <= 0 ? '+' : '-') + Math.abs(now.getTimezoneOffset()/60).toString().padStart(2,'0') + ':00';
+                el.innerHTML = d + ', ' + t + '<br>UTC ' + tz;
+            }
+            updateClock();
+            setInterval(updateClock, 60000);
+
+            // Set initial mode to Live Map
+            switchMaritimeMode('live_map');
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,841 @@
+/* ==========================================================================
+   Maritime Emergency Response System — Light App Theme
+   Matches the professional Coast Guard Control Room UI from design mockup
+   ========================================================================== */
+
+/* Global Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f0f4f8;
+    color: #1e293b;
+}
+
+/* ==========================================================================
+   APP SHELL — Full viewport flex layout
+   ========================================================================== */
+.app-shell {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   TOP NAVBAR
+   ========================================================================== */
+.top-navbar {
+    height: 58px;
+    min-height: 58px;
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px 0 16px;
+    gap: 14px;
+    z-index: 2000;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-brand-icon {
+    font-size: 22px;
+    color: #1e40af;
+    background: #dbeafe;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-brand-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+.nav-brand-sub {
+    font-size: 10.5px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.nav-hamburger {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #475569;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+.nav-hamburger:hover { background: #f1f5f9; }
+
+.navbar-center {
+    flex: 1;
+    max-width: 480px;
+}
+
+.nav-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 8px 14px;
+}
+.nav-search-icon { font-size: 13px; color: #94a3b8; }
+.nav-search-input {
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    color: #334155;
+    width: 100%;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+}
+.nav-search-input::placeholder { color: #94a3b8; }
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.nav-icon-btn {
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 6px;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+}
+.nav-icon-btn:hover { background: #f1f5f9; }
+
+.nav-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.nav-report-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+}
+.nav-report-btn:hover { background: #f9fafb; border-color: #9ca3af; }
+
+/* ==========================================================================
+   APP BODY
+   ========================================================================== */
+.app-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   LEFT SIDEBAR
+   ========================================================================== */
+.left-sidebar {
+    width: 180px;
+    min-width: 180px;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px 0;
+    z-index: 100;
+    overflow: hidden;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.left-sidebar.collapsed {
+    width: 0 !important;
+    min-width: 0 !important;
+    padding: 12px 0 !important;
+    border-right-color: transparent !important;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 14px 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.sidebar-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: #94a3b8;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.sidebar-close-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.sidebar-close-btn:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 10px;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s ease;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    outline: none;
+}
+.sidebar-nav-item:hover {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+.sidebar-nav-item.active {
+    background: #1e3a5f;
+    color: #ffffff;
+}
+.sidebar-nav-item.active .sidebar-nav-icon {
+    filter: brightness(2);
+}
+
+.sidebar-nav-icon {
+    font-size: 16px;
+    width: 18px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.sidebar-nav-label {
+    font-size: 13px;
+    font-weight: 500;
+    flex: 1;
+}
+
+.sidebar-layer-badge {
+    font-size: 9px;
+    font-weight: 800;
+    background: #22c55e;
+    color: #ffffff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-nav-item.layer-on {
+    background: #f0fdf4;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+.sidebar-footer {
+    padding: 12px 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.sidebar-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.sidebar-status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 5px #22c55e;
+}
+
+.sidebar-status-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.sidebar-status-sub {
+    font-size: 10.5px;
+    color: #22c55e;
+    margin-left: 13px;
+    margin-bottom: 6px;
+}
+
+.sidebar-datetime {
+    font-size: 10px;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   MAIN CONTENT (MAP AREA)
+   ========================================================================== */
+.main-content {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Map fills the entire main content area */
+#map {
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   COORDINATE PANEL (Top-Right of map area)
+   ========================================================================== */
+.coordinate-panel {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 1000;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 13px 16px;
+    min-width: 210px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    pointer-events: auto;
+}
+
+.coord-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.coord-panel-pin { font-size: 14px; }
+.coord-panel-title {
+    font-size: 10px;
+    font-weight: 800;
+    color: #e53935;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+}
+
+.coord-panel-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+.coord-panel-lbl {
+    font-size: 12px;
+    color: #64748b;
+    font-weight: 500;
+}
+.coord-panel-val {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+    font-family: 'JetBrains Mono', monospace;
+}
+.coord-panel-sub {
+    font-size: 10px;
+    color: #94a3b8;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   CUSTOM LEAFLET POPUP (Light Theme)
+   ========================================================================== */
+.leaflet-popup-content-wrapper {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important;
+    padding: 0 !important;
+}
+
+.leaflet-popup-tip {
+    background: #ffffff !important;
+}
+
+.maritime-popup {
+    padding: 12px 14px;
+    min-width: 220px;
+    max-width: 290px;
+    font-family: 'Inter', sans-serif;
+}
+
+.popup-header-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.ship-tag {
+    background: rgba(30, 58, 138, 0.08);
+    color: #1e3a8a;
+    border: 1px solid rgba(30, 58, 138, 0.2);
+}
+
+.port-tag {
+    background: rgba(220, 38, 38, 0.08);
+    color: #dc2626;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.popup-item-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 5px;
+    word-break: break-word;
+}
+
+.popup-info-grid { display: flex; flex-direction: column; gap: 4px; }
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+
+.info-label { color: #64748b; font-weight: 500; }
+.info-val { font-weight: 600; color: #334155; }
+.mono-val { font-family: 'JetBrains Mono', monospace; color: #1e40af; }
+.status-active { color: #16a34a; }
+.facility-yes { color: #16a34a; font-weight: 700; }
+.facility-no { color: #dc2626; }
+
+/* ==========================================================================
+   LEAFLET CONTROLS (Light Theme)
+   ========================================================================== */
+.leaflet-control-zoom {
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08) !important;
+    margin-right: 14px !important;
+    margin-bottom: 14px !important;
+}
+
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out {
+    background-color: #ffffff !important;
+    color: #374151 !important;
+    border: none !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 16px !important;
+    transition: background 0.15s ease;
+}
+.leaflet-control-zoom-in:hover,
+.leaflet-control-zoom-out:hover {
+    background-color: #f1f5f9 !important;
+    color: #1e40af !important;
+}
+.leaflet-container .leaflet-control-attribution {
+    background: rgba(255,255,255,0.85) !important;
+    color: #64748b !important;
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+    border-top-left-radius: 6px;
+}
+.leaflet-container .leaflet-control-attribution a { color: #1e40af !important; }
+
+/* ==========================================================================
+   PORT POPUP - Ship/Port styling
+   ========================================================================== */
+.popup-info-grid .info-row .info-val.sim-tag {
+    background: rgba(251, 140, 0, 0.1);
+    color: #ea580c;
+    border: 1px solid rgba(251, 140, 0, 0.25);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* ==========================================================================
+   EMERGENCY MISSION PANEL — White card, inside main content
+   ========================================================================== */
+#routeSafetyDashboard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 900;
+    width: 300px;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.06);
+    animation: slideInLeft 0.28s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-100%); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+#routeSafetyDashboard::-webkit-scrollbar { width: 4px; }
+#routeSafetyDashboard::-webkit-scrollbar-track { background: #f8fafc; }
+#routeSafetyDashboard::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+#routeSafetyDashboard::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ==========================================================================
+   COMMAND CENTER PANEL (retained for compatibility)
+   ========================================================================== */
+.cmd-center-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 900;
+    width: 300px;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    overflow-y: auto;
+    box-shadow: 2px 0 12px rgba(0,0,0,0.06);
+    animation: slideInLeft 0.28s cubic-bezier(0.34,1.56,0.64,1);
+}
+.cmd-center-panel::-webkit-scrollbar { width: 4px; }
+.cmd-center-panel::-webkit-scrollbar-track { background: #f8fafc; }
+.cmd-center-panel::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.cmd-center-panel::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ==========================================================================
+   MISSION PANEL INNER COMPONENTS (Light Theme)
+   ========================================================================== */
+.cmd-mission-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin: 0 12px;
+}
+
+/* Circular Score Gauge */
+.circle-gauge-wrap {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.circle-gauge-wrap svg { transform: rotate(-90deg); }
+.circle-gauge-bg { fill: none; stroke: #e2e8f0; stroke-width: 8; }
+.circle-gauge-val { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s ease; }
+
+/* Risk Progress Bars */
+.risk-bar-container { display: flex; flex-direction: column; gap: 8px; }
+.risk-bar-row { display: flex; flex-direction: column; gap: 3px; }
+.risk-bar-label { display: flex; justify-content: space-between; font-size: 11px; color: #64748b; font-weight: 600; }
+.risk-bar-track { height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+.risk-bar-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+/* Compact Port Cards */
+.cmd-port-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    margin: 0 12px;
+}
+.cmd-port-card:hover { border-color: #3b82f6; background: #eff6ff; }
+.cmd-port-card.recommended {
+    background: #f0fdf4;
+    border: 1.5px solid #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+/* Action Buttons */
+.cmd-btn-primary {
+    background: #1e40af;
+    color: #ffffff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    transition: all 0.18s ease;
+    box-shadow: 0 2px 8px rgba(30,64,175,0.25);
+    font-family: 'Inter', sans-serif;
+}
+.cmd-btn-primary:hover { background: #1e3a8a; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(30,64,175,0.35); }
+
+.cmd-btn-secondary {
+    background: #eff6ff;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.18s ease;
+    font-family: 'Inter', sans-serif;
+}
+.cmd-btn-secondary:hover { background: #dbeafe; border-color: #93c5fd; }
+
+.cmd-btn-danger {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 9px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.18s ease;
+    font-family: 'Inter', sans-serif;
+}
+.cmd-btn-danger:hover { background: #fee2e2; border-color: #f87171; }
+
+/* Why Badges */
+.why-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 7px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+.why-badge-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.why-badge-warning { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+.why-badge-safe { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+/* ==========================================================================
+   EMERGENCY PORT TOOLTIP (Map)
+   ========================================================================== */
+.emergency-port-tooltip {
+    background: rgba(30, 41, 59, 0.92) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    border-radius: 8px !important;
+    color: #f8fafc !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 5px 9px !important;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3) !important;
+    white-space: nowrap !important;
+    pointer-events: none !important;
+}
+.emergency-port-tooltip::before { border-top-color: rgba(30,41,59,0.92) !important; }
+
+/* ==========================================================================
+   RECOMMENDED PORT BADGE (Map pin)
+   ========================================================================== */
+.rec-port-badge {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #22c55e;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 8px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(34,197,94,0.4);
+    letter-spacing: 0.4px;
+}
+
+/* ==========================================================================
+   WHY THIS PORT MODAL
+   ========================================================================== */
+.why-port-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(15,23,42,0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.18s ease-out;
+}
+
+.why-port-modal-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 440px;
+    width: 90vw;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    color: #0f172a;
+    font-family: 'Inter', sans-serif;
+    animation: scaleUp 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes scaleUp { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ==========================================================================
+   POPUP and Marker shared light styles
+   ========================================================================== */
+.custom-standalone-ship-icon {
+    background: transparent !important;
+    border: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.standalone-ship-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.35));
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    transform-origin: center center;
+}
+.standalone-ship-wrapper:hover { transform: scale(1.35) !important; }
+
+.port-marker-icon { display: flex; align-items: center; justify-content: center; }
+.port-pin-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 3px 6px rgba(0,0,0,0.3));
+    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    transform-origin: bottom center;
+}
+.port-pin-wrapper:hover { transform: scale(1.25) translateY(-2px); }
+
+.marker-cluster-small { background-color: rgba(30,64,175,0.2) !important; }
+.marker-cluster-small div { background-color: rgba(30,64,175,0.85) !important; color: #fff !important; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+.marker-cluster-medium { background-color: rgba(30,64,175,0.25) !important; }
+.marker-cluster-medium div { background-color: rgba(30,64,175,0.9) !important; color: #fff !important; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+.marker-cluster-large { background-color: rgba(30,64,175,0.3) !important; }
+.marker-cluster-large div { background-color: rgba(30,64,175,0.95) !important; color: #fff !important; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+
+/* Port/Ship status pills in popups */
+.sim-tag { background: rgba(234,88,12,0.1); color: #ea580c; border: 1px solid rgba(234,88,12,0.25); }
+.sim-hint { font-size: 10px; color: #94a3b8; text-align: center; font-style: italic; margin-top: 6px; padding-top: 5px; border-top: 1px solid #f1f5f9; }
+
+/* Fuel bar */
+.fuel-bar-wrap { width: 60px; height: 5px; background: #e2e8f0; border-radius: 3px; overflow: hidden; display: inline-block; }
+.fuel-bar { height: 100%; background: linear-gradient(90deg, #22c55e, #86efac); border-radius: 3px; transition: width 0.4s ease; }
+.sim-live { transition: color 0.3s ease; }
+.sim-fuel { display: flex; align-items: center; gap: 8px; }
